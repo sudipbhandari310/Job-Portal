@@ -1,49 +1,25 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
 
 
-Route::get('/', function () {
+// Route::resource('jobs',JobController::class);
+Route::view('/','home');
+    
+Route::get('/jobs' , [JobController::class, 'index']);
+    
+Route::get('/jobs/create', [JobController::class,'create']);
+
+Route::get('/jobs/{job}', [JobController::class, 'show']);
+    
+Route::post('/jobs',[JobController::class , 'post']);
+
+Route::get('/jobs/{job}/edit',[JobController::class , 'edit']);
+    
+Route::patch('/jobs/{job}', [JobController::class, 'update']);
+
+Route::delete('/jobs/{job}', [JobController::class , 'delete']);
    
-    return view('home');
-});
-    
-
-Route::get('/jobs' ,function(){
-    return view('jobs/index',[ 'jobs'=> Job::all()
-        ]);
-});
-
-
-
-
-Route::get('/jobs/create',function(){
-    return view('jobs.create');
-});
-
-Route::get('/jobs/{id}', function($id) {
-    
-
-$job= Job::find($id);
-
-    return view('jobs.show', ['job'=> $job]);
-});
-
-
-Route::post('/jobs',function(){
-    
-    //validate
-
-    Job::create([
-        'title'=> request('title'),
-        'salary'=> request('salary'),
-        
-    ]);
- 
-return redirect('/jobs');
-});
-
-Route::get('/contacts', function(){
-    return view('contacts');
-});
+Route::view('/contact' , 'contacts');
